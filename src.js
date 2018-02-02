@@ -14,19 +14,24 @@ firebase.initializeApp(config);
 
 let database = firebase.database();
 
-let messegeList = document.getElementById("messageList");
+let messageList = document.getElementById("messageList");
 let inputBoard = document.getElementById("inputBoard");
 let sendButton = document.getElementById("sendButton");
 
+//database update function
 database.ref('/').on('value', function(snapshot) {
     console.log("Något hände i databasen!");
     let data = snapshot.val();
+    
+    while( messageList.firstChild ) {
+        messageList.removeChild( messageList.firstChild );
+    }
     
     for( let messages in data ) {
         let r = data[messages];
         let newListitem = document.createElement('li');
         newListitem.innerHTML = r.message;
-        messegeList.appendChild(newListitem);
+        messageList.appendChild(newListitem);
     }
     
 })
