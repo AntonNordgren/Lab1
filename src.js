@@ -18,20 +18,27 @@ let messageList = document.getElementById("messageList");
 let inputBoard = document.getElementById("inputBoard");
 let sendButton = document.getElementById("sendButton");
 
-//database update function
 database.ref('/').on('value', function(snapshot) {
     console.log("Något hände i databasen!");
     let data = snapshot.val();
+    let listOfMessages = [];
     
     while( messageList.firstChild ) {
         messageList.removeChild( messageList.firstChild );
     }
     
-    for( let messages in data ) {
-        let r = data[messages];
-        let newListitem = document.createElement('li');
-        newListitem.innerHTML = r.message;
-        messageList.appendChild(newListitem);
+    for( let object in data ) {
+        let r = data[object];
+        listOfMessages.push(r.user + ": " + r.message);
+    }
+    
+    listOfMessages.reverse();
+    console.log(listOfMessages);
+    
+    for(let i = 0; i < listOfMessages.length; i++) {
+        let newNode = document.createElement('li');
+        newNode.innerHTML = listOfMessages[i];
+        messageList.appendChild(newNode);
     }
     
 })
@@ -53,11 +60,6 @@ sendButton.addEventListener("click", function() {
     
     database.ref('/').push(newMessage);
 });
-
-
-
-
-
 
 
 

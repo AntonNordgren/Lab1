@@ -5,7 +5,7 @@
 }
 
 body {
-	background-color: red;
+	background-color: blueviolet;
     font-family: 'Dhurjati', sans-serif;
 }
 
@@ -29,16 +29,17 @@ body {
 
 #inputBoard {
 	position: relative;
+    width: 80%;
 	top: 20px;
+    font-size: 1.5em;
 }
 
 #sendButton {
     position: relative;
-    width: 10%;
-    height: 40px;
-    left: 45%;
-    right: 45%;
-    top: 30px;
+    left: 85%;
+    width: 15%;
+    height: 35px;
+    bottom: 15px;
     font-size: 1.2em;
 }
 
