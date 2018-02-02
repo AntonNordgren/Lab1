@@ -20,10 +20,23 @@ body {
 
 #textBoard {
 	position: relative;
-	height: 200px;
+    height: 250px;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
 }
 
 #inputBoard {
 	position: relative;
 	top: 20px;
+}
+
+#sendButton {
+    position: relative;
+    width: 10%;
+    height: 40px;
+    left: 45%;
+    right: 45%;
+    top: 30px;
+    font-size: 1.5em;
 }
