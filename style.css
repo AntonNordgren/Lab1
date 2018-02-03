@@ -5,8 +5,8 @@
 }
 
 body {
-	background-color: blueviolet;
-    font-family: 'Dhurjati', sans-serif;
+	background-color: #083377;
+    font-family: 'Fjalla One', sans-serif;
 }
 
 #content {
@@ -21,7 +21,7 @@ body {
 
 #textBoard {
 	position: relative;
-    height: 250px;
+    height: 500px;
     width: 100%;
     background-color: beige;
     border-radius: 10px;
@@ -47,10 +47,52 @@ body {
     position: relative;
     font-size: 1.5em;
     width: 90%;
-    height: 230px;
+    height: 450px;
     top: 10px;
     left: 5%;
     right: 5%;
     list-style: none;
     overflow: scroll;
+}
+
+.messageDiv {
+    position: relative;
+    height: 80px;
+    width: 95%;
+    left: 2.5%;
+    right: 2.5%;
+    background-color: #9bbef7;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.messageContent {
+    position: relative;
+    width: 90%;
+    left: 5%;
+    right: 5%;
+    height: 100%;
+}
+
+.userLabel {
+    position: relative;
+    top: 5px;
+    left: 20px;
+    font-size: 1.2em;
+    color: red;
+}
+
+.messageLabel {
+    position: relative;
+    top: 20px;
+    left: 100px;
+    color: white;
+}
+
+.timeLabel {
+    position: relative;
+    font-size: .8em;
+    top: 40px;
+    right: 80px;
+    color: lightgrey;
 }

@@ -1,5 +1,6 @@
 
-let user = prompt("Skriv ditt namn");
+//let user = prompt("Skriv ditt namn");
+let user = "Anton";
 
 // Initialize Firebase
 var config = {
@@ -29,15 +30,95 @@ database.ref('/').on('value', function(snapshot) {
     
     for( let object in data ) {
         let r = data[object];
-        listOfMessages.push(r.user + ": " + r.message);
+        let time = {
+            year : r.date.year,
+            month : r.date.month,
+            date : r.date.day
+        }
+        let newData = {
+            user: r.user,
+            message: r.message,
+            time : time
+        }
+        listOfMessages.push(newData);
     }
     
     listOfMessages.reverse();
     console.log(listOfMessages);
     
     for(let i = 0; i < listOfMessages.length; i++) {
-        let newNode = document.createElement('li');
-        newNode.innerHTML = listOfMessages[i];
+        
+        let user = listOfMessages[i].user;
+        let message = listOfMessages[i].message;
+        let year = listOfMessages[i].time.year;
+        let month = listOfMessages[i].time.month;
+        let date = listOfMessages[i].time.date;
+        
+        let newNode = document.createElement('div');
+        
+        let content = document.createElement('div');
+        
+        content.className = "messageContent";
+        newNode.appendChild(content);
+        
+        let userLabel = document.createElement('span');
+        userLabel.className = 'userLabel';
+        userLabel.innerHTML = user + ": ";
+        newNode.appendChild(userLabel);
+        
+        let messageLabel = document.createElement('span');
+        messageLabel.className = 'messageLabel';
+        messageLabel.innerHTML = message;
+        newNode.appendChild(messageLabel);
+        
+        let timeLabel = document.createElement('span');
+        timeLabel.className = 'timeLabel';
+        
+        switch(month) {
+            case 0:
+                month = "Jan"
+                break;
+            case 1:
+                month = "Feb"
+                break;
+            case 2:
+                month = "Mar"
+                break;
+            case 3:
+                month = "Apr"
+                break;
+            case 4:
+                month = "May"
+                break;
+            case 5:
+                month = "June"
+                break;
+            case 6:
+                month = "July"
+                break;
+            case 7:
+                month = "Aug"
+                break;
+            case 8:
+                month = "Sept"
+                break;
+            case 9:
+                month = "Oct"
+                break;
+            case 10:
+                month = "Nov"
+                break;
+            case 11:
+                month = "Dec"
+                break;
+        }
+        
+        timeLabel.innerHTML = year + ", " + month + ", " + date;
+        newNode.appendChild(timeLabel);
+        
+        
+        newNode.className = "messageDiv";
+        newNode.appendChild(content);
         messageList.appendChild(newNode);
     }
     
