@@ -1,6 +1,5 @@
 
-//let user = prompt("Skriv ditt namn");
-let user = "Anton";
+let user = prompt("Skriv ditt namn");
 
 // Initialize Firebase
 var config = {
