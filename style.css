@@ -5,7 +5,7 @@
 }
 
 body {
-	background-color: #083377;
+	background-color: #1b133a;
     font-family: 'Fjalla One', sans-serif;
 }
 
@@ -38,9 +38,13 @@ body {
     position: relative;
     left: 85%;
     width: 15%;
-    height: 35px;
-    bottom: 15px;
+    height: 45px;
+    bottom: 25px;
+    border-radius: 20px;
     font-size: 1.2em;
+    font-family: 'Fjalla One', sans-serif;
+    color: white;
+    background-color: #9bbef7;
 }
 
 #messageList {
@@ -75,8 +79,8 @@ body {
 }
 
 .userLabel {
-    position: relative;
-    top: 5px;
+    position: absolute;
+    top: 20px;
     left: 20px;
     font-size: 1.2em;
     color: red;
@@ -84,15 +88,17 @@ body {
 
 .messageLabel {
     position: relative;
+    font-size: 1.2em;
     top: 20px;
-    left: 100px;
+    left: 120px;
     color: white;
 }
 
 .timeLabel {
-    position: relative;
+    position: absolute;
     font-size: .8em;
-    top: 40px;
-    right: 80px;
+    top: 0;
+    right: 0;
+    padding: 10px;
     color: lightgrey;
 }

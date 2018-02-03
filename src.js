@@ -1,5 +1,6 @@
 
-let user = prompt("Skriv ditt namn");
+let user = prompt("Skriv in ditt namn");
+localStorage.setItem("user", user);
 
 // Initialize Firebase
 var config = {
@@ -32,7 +33,9 @@ database.ref('/').on('value', function(snapshot) {
         let time = {
             year : r.date.year,
             month : r.date.month,
-            date : r.date.day
+            date : r.date.day,
+            hour: r.date.hour,
+            minute: r.date.minute
         }
         let newData = {
             user: r.user,
@@ -52,6 +55,8 @@ database.ref('/').on('value', function(snapshot) {
         let year = listOfMessages[i].time.year;
         let month = listOfMessages[i].time.month;
         let date = listOfMessages[i].time.date;
+        let hour = listOfMessages[i].time.hour;
+        let minute = listOfMessages[i].time.minute;
         
         let newNode = document.createElement('div');
         
@@ -112,7 +117,7 @@ database.ref('/').on('value', function(snapshot) {
                 break;
         }
         
-        timeLabel.innerHTML = year + ", " + month + ", " + date;
+        timeLabel.innerHTML = year + ", " + month + ", " + date + ", " + hour + ":" + minute;
         newNode.appendChild(timeLabel);
         
         
@@ -126,16 +131,17 @@ database.ref('/').on('value', function(snapshot) {
 sendButton.addEventListener("click", function() {
     let d = new Date();
     
-    let newDate = {
+    let newTime = {
         year : d.getFullYear(),
         month: d.getMonth(), 
         day: d.getDate(),
-        hour: d.getHours()
+        hour: d.getHours(),
+        minute: d.getMinutes()
     }
     let newMessage = {
         user : user,
         message : inputBoard.value,
-        date : newDate
+        date : newTime
     };
     
     database.ref('/').push(newMessage);
