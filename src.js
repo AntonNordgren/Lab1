@@ -1,6 +1,5 @@
 
-let user = prompt("Skriv in ditt namn");
-localStorage.setItem("user", user);
+logIn();
 
 // Initialize Firebase
 var config = {
@@ -18,6 +17,7 @@ let database = firebase.database();
 let messageList = document.getElementById("messageList");
 let inputBoard = document.getElementById("inputBoard");
 let sendButton = document.getElementById("sendButton");
+let logoutButton = document.getElementById("logoutButton");
 
 database.ref('/').on('value', function(snapshot) {
     console.log("Något hände i databasen!");
@@ -67,7 +67,7 @@ database.ref('/').on('value', function(snapshot) {
         
         let userLabel = document.createElement('span');
         userLabel.className = 'userLabel';
-        userLabel.innerHTML = user + ": ";
+        userLabel.innerHTML = user + ":  ";
         newNode.appendChild(userLabel);
         
         let messageLabel = document.createElement('span');
@@ -117,9 +117,39 @@ database.ref('/').on('value', function(snapshot) {
                 break;
         }
         
+        if(minute < 10){
+            minute = "0" + minute;
+        }
+        
         timeLabel.innerHTML = year + ", " + month + ", " + date + ", " + hour + ":" + minute;
         newNode.appendChild(timeLabel);
         
+        let votePanel = document.createElement("form");
+        votePanel.className = "votePanel";
+        
+        let nrOfLikes = document.createElement("span");
+        let nrOfLikesCounter = 0;
+        nrOfLikes.className = "counter";
+        nrOfLikes.innerHTML = nrOfLikesCounter;
+        votePanel.appendChild(nrOfLikes);
+        
+        let upVoteButton = document.createElement("input");
+        upVoteButton.type = "radio";
+        upVoteButton.name = "test";
+        votePanel.appendChild(upVoteButton);
+        
+        let nrOfdislikes = document.createElement("span");
+        let nrOfdislikesCounter = 0;
+        nrOfdislikes.className = "counter";
+        nrOfdislikes.innerHTML = nrOfdislikesCounter;
+        votePanel.appendChild(nrOfdislikes);
+        
+        let downVoteButton = document.createElement("input");
+        downVoteButton.type = "radio";
+        downVoteButton.name = "test";
+        votePanel.appendChild(downVoteButton);
+        
+        content.appendChild(votePanel);
         
         newNode.className = "messageDiv";
         newNode.appendChild(content);
@@ -139,13 +169,22 @@ sendButton.addEventListener("click", function() {
         minute: d.getMinutes()
     }
     let newMessage = {
-        user : user,
+        user : localStorage.getItem('user'),
         message : inputBoard.value,
         date : newTime
     };
     
     database.ref('/').push(newMessage);
 });
+
+logoutButton.addEventListener("click", function() {
+    logIn();
+});
+
+function logIn() {
+    //let user = prompt("Enter User");
+    localStorage.setItem('user', "Anton");
+}
 
 
 
