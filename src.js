@@ -19,10 +19,17 @@ let inputBoard = document.getElementById("inputBoard");
 let sendButton = document.getElementById("sendButton");
 let logoutButton = document.getElementById("logoutButton");
 
+let keyList = [];
+
 database.ref('/').on('value', function(snapshot) {
-    console.log("Något hände i databasen!");
     let data = snapshot.val();
     let listOfMessages = [];
+    
+    if(data !== null) {
+        let keys = Object.keys(data);
+        keys.reverse();
+        keyList = keys;
+    }
     
     while( messageList.firstChild ) {
         messageList.removeChild( messageList.firstChild );
@@ -37,18 +44,24 @@ database.ref('/').on('value', function(snapshot) {
             hour: r.date.hour,
             minute: r.date.minute
         }
+        
         let newData = {
             user: r.user,
             message: r.message,
-            time : time
+            time : time,
+            likers : r.likers,
+            dislikers : r.dislikers,
+            likes : r.likes,
+            dislikes : r.dislikes
         }
         listOfMessages.push(newData);
     }
     
     listOfMessages.reverse();
-    console.log(listOfMessages);
     
     for(let i = 0; i < listOfMessages.length; i++) {
+        
+        let key = keyList[i];
         
         let user = listOfMessages[i].user;
         let message = listOfMessages[i].message;
@@ -57,6 +70,10 @@ database.ref('/').on('value', function(snapshot) {
         let date = listOfMessages[i].time.date;
         let hour = listOfMessages[i].time.hour;
         let minute = listOfMessages[i].time.minute;
+        let likes = listOfMessages[i].likes;
+        let dislikes = listOfMessages[i].dislikes;
+        let likers = listOfMessages[i].likers;
+        let dislikers = listOfMessages[i].dislikers;
         
         let newNode = document.createElement('div');
         
@@ -128,25 +145,95 @@ database.ref('/').on('value', function(snapshot) {
         votePanel.className = "votePanel";
         
         let nrOfLikes = document.createElement("span");
-        let nrOfLikesCounter = 0;
         nrOfLikes.className = "counter";
-        nrOfLikes.innerHTML = nrOfLikesCounter;
+        nrOfLikes.innerHTML = likes;
         votePanel.appendChild(nrOfLikes);
         
         let upVoteButton = document.createElement("input");
-        upVoteButton.type = "radio";
+        upVoteButton.type = "checkbox";
         upVoteButton.name = "test";
+        upVoteButton.checked = false;
+        upVoteButton.addEventListener("click", function(){
+            if(upVoteButton.checked == true) {
+                downVoteButton.disabled = true;
+                database.ref(key + '/').once('value', function(){
+                    console.log("Något hände på " + key);
+                    likes = likes + 1;
+                    let time = {
+                        year : year,
+                        month : month,
+                        day : date,
+                        hour : hour,
+                        minute : minute
+                    }
+                    
+                    let newLiker = {
+                        user : user,
+                        message : message,
+                        date : time,
+                        likers : likers,
+                        dislikers : dislikers,
+                        likes : likes,
+                        dislikes : dislikes
+                    }
+                    database.ref(key).set(newLiker);
+                    database.ref(key + "/likers").push({
+                        user : localStorage.getItem('user'),
+                        key : key,
+                        like : true
+                    });
+                })
+            }
+            else {
+                downVoteButton.disabled = false;
+            }
+        })
         votePanel.appendChild(upVoteButton);
         
-        let nrOfdislikes = document.createElement("span");
-        let nrOfdislikesCounter = 0;
-        nrOfdislikes.className = "counter";
-        nrOfdislikes.innerHTML = nrOfdislikesCounter;
-        votePanel.appendChild(nrOfdislikes);
+        let nrOfDislikes = document.createElement("span");
+        let nrOfDislikesCounter = dislikes;
+        nrOfDislikes.className = "counter";
+        nrOfDislikes.innerHTML = nrOfDislikesCounter;
+        votePanel.appendChild(nrOfDislikes);
         
         let downVoteButton = document.createElement("input");
-        downVoteButton.type = "radio";
+        downVoteButton.type = "checkbox";
         downVoteButton.name = "test";
+        downVoteButton.checked = false;
+        downVoteButton.addEventListener("click", function(){
+            if(downVoteButton.checked == true) {
+                upVoteButton.disabled = true;
+                database.ref(key + '/').once('value', function(){
+                    console.log("Något hände på " + key);
+                    dislikes++;
+                    let time = {
+                        year : year,
+                        month : month,
+                        day : date,
+                        hour : hour,
+                        minute : minute
+                    }
+                    let newDisliker = {
+                        user : user,
+                        message : message,
+                        date : time,
+                        likers : likers,
+                        dislikers : dislikers,
+                        likes : likes,
+                        dislikes : dislikes
+                    }
+                    database.ref(key).set(newDisliker);
+                    database.ref(key + "/dislikers").push({
+                        user : localStorage.getItem('user'),
+                        key : key,
+                        like : false                       
+                    });
+                })
+            }
+            else {
+                upVoteButton.disabled = false;
+            }
+        })
         votePanel.appendChild(downVoteButton);
         
         content.appendChild(votePanel);
@@ -167,14 +254,26 @@ sendButton.addEventListener("click", function() {
         day: d.getDate(),
         hour: d.getHours(),
         minute: d.getMinutes()
+    };
+    
+    let likers = {
+        test : "asd"
     }
+    
+    let dislikers = {
+        test : "asd"
+    }
+    
     let newMessage = {
         user : localStorage.getItem('user'),
         message : inputBoard.value,
-        date : newTime
+        date : newTime,
+        likers : likers,
+        dislikers : dislikers,
+        likes : 0,
+        dislikes : 0
     };
-    
-    database.ref('/').push(newMessage);
+    database.ref("/").push(newMessage);
 });
 
 logoutButton.addEventListener("click", function() {
@@ -182,7 +281,7 @@ logoutButton.addEventListener("click", function() {
 });
 
 function logIn() {
-    let user = prompt("Enter User");
-    localStorage.setItem('user', user);
+    //let user = prompt("Enter User");
+    localStorage.setItem('user', "Anton");
 }
 
