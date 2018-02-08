@@ -134,7 +134,7 @@ database.ref('/').on('value', function(snapshot) {
                 break;
         }
         
-        if(minute < 10){
+        if(minute < 10 && minute[0] != 0){
             minute = "0" + minute;
         }
         
@@ -149,49 +149,45 @@ database.ref('/').on('value', function(snapshot) {
         nrOfLikes.innerHTML = likes;
         votePanel.appendChild(nrOfLikes);
         
-        let upVoteButton = document.createElement("input");
-        upVoteButton.type = "checkbox";
+        let upVoteButton = document.createElement("label");
+        upVoteButton.innerText = "👍";
         upVoteButton.name = "test";
         upVoteButton.checked = false;
+        
         upVoteButton.addEventListener("click", function(){
-            if(upVoteButton.checked == true) {
                 
-                let users = [];
-                
-                database.ref(key + '/').once('value', function(){
-                    console.log("Något hände på " + key);
+            let users = [];
+
+            database.ref(key + '/').once('value', function(){
+                console.log("Något hände på " + key);
                     
-                    likes = likes + 1;
-                    let time = {
-                        year : year,
-                        month : month,
-                        day : date,
-                        hour : hour,
-                        minute : minute
-                    }
+                likes = likes + 1;
+                let time = {
+                    year : year,
+                    month : month,
+                    day : date,
+                    hour : hour,
+                    minute : minute
+                }
                     
-                    let newLiker = {
-                        user : user,
-                        message : message,
-                        date : time,
-                        likers : likers,
-                        dislikers : dislikers,
-                        likes : likes,
-                        dislikes : dislikes
-                    }
+                let newLiker = {
+                    user : user,
+                    message : message,
+                    date : time,
+                    likers : likers,
+                    dislikers : dislikers,
+                    likes : likes,
+                    dislikes : dislikes
+                }
                     
-                    database.ref(key).set(newLiker);
-                    database.ref(key + "/likers").push({
-                        user : localStorage.getItem('user'),
-                        key : key,
-                        vote : 1                       
-                    });
+                database.ref(key).set(newLiker);
+                database.ref(key + "/likers").push({
+                    user : localStorage.getItem('user'),
+                    key : key,
+                    vote : 1                       
+                });
                     
-                })
-            }
-            else {
-                downVoteButton.disabled = false;
-            }
+            })
         })
         votePanel.appendChild(upVoteButton);
         
@@ -201,43 +197,37 @@ database.ref('/').on('value', function(snapshot) {
         nrOfDislikes.innerHTML = nrOfDislikesCounter;
         votePanel.appendChild(nrOfDislikes);
         
-        let downVoteButton = document.createElement("input");
-        downVoteButton.type = "checkbox";
+        let downVoteButton = document.createElement("label");
         downVoteButton.name = "test";
+        downVoteButton.innerText = "👎";
         downVoteButton.checked = false;
         downVoteButton.addEventListener("click", function(){
-            if(downVoteButton.checked == true) {
-                upVoteButton.disabled = true;
-                database.ref(key + '/').once('value', function(){
-                    console.log("Något hände på " + key);
-                    dislikes++;
-                    let time = {
-                        year : year,
-                        month : month,
-                        day : date,
-                        hour : hour,
-                        minute : minute
-                    }
-                    let newDisliker = {
-                        user : user,
-                        message : message,
-                        date : time,
-                        likers : likers,
-                        dislikers : dislikers,
-                        likes : likes,
-                        dislikes : dislikes
-                    }
-                    database.ref(key).set(newDisliker);
-                    database.ref(key + "/dislikers").push({
-                        user : localStorage.getItem('user'),
-                        key : key,
-                        vote : 1                       
-                    });
-                })
+            database.ref(key + '/').once('value', function(){
+            console.log("Något hände på " + key);
+            dislikes++;
+            let time = {
+                year : year,
+                month : month,
+                day : date,
+                hour : hour,
+                minute : minute
             }
-            else {
-                upVoteButton.disabled = false;
+            let newDisliker = {
+                user : user,
+                message : message,
+                date : time,
+                likers : likers,
+                dislikers : dislikers,
+                likes : likes,
+                dislikes : dislikes
             }
+            database.ref(key).set(newDisliker);
+            database.ref(key + "/dislikers").push({
+                user : localStorage.getItem('user'),
+                key : key,
+                vote : 1                       
+            });
+        })
         })
         votePanel.appendChild(downVoteButton);
         
@@ -287,7 +277,10 @@ sendButton.addEventListener("click", function() {
         likes : 0,
         dislikes : 0
     };
-    database.ref("/").push(newMessage);
+    
+    if(newMessage.message !== ""){
+        database.ref("/").push(newMessage);
+    }
 });
 
 logoutButton.addEventListener("click", function() {

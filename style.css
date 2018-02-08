@@ -2,6 +2,7 @@
 * {
 	padding: 0;
 	margin: 0;
+    outline: none;
 }
 
 body {
@@ -105,17 +106,31 @@ body {
 
 .votePanel {
     position: absolute;
-    right: 0;
-    width: 20%;
+    right: 40px;
+    bottom: 40px;
+    width: 15%;
     height: 40px;
 }
 
 .votePanel input {
     position: relative;
-    width: 25%;
+    width: 20%;
 }
 
 .counter {
     position: relative;
     width: 25%;
+}
+
+#logoutButton {
+    position: relative;
+    width: 15%;
+    background-color: #9bbef7;
+    border-radius: 10px;
+    font-family: 'Fjalla One', sans-serif;
+    font-size: 1.2em;
+    color: white;
+    left: 42.5%;
+    right: 42.5%;
+    bottom: 10px;
 }
