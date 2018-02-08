@@ -296,6 +296,6 @@ logoutButton.addEventListener("click", function() {
 
 function logIn() {
     let user = prompt("Enter User");
-    localStorage.setItem('user', "Anton");
+    localStorage.setItem('user', user);
 }
 
