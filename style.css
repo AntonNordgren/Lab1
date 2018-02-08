@@ -113,7 +113,6 @@ body {
 .votePanel input {
     position: relative;
     width: 25%;
-    border: solid black 1px;
 }
 
 .counter {

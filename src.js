@@ -155,9 +155,12 @@ database.ref('/').on('value', function(snapshot) {
         upVoteButton.checked = false;
         upVoteButton.addEventListener("click", function(){
             if(upVoteButton.checked == true) {
-                downVoteButton.disabled = true;
+                
+                let users = [];
+                
                 database.ref(key + '/').once('value', function(){
                     console.log("Något hände på " + key);
+                    
                     likes = likes + 1;
                     let time = {
                         year : year,
@@ -176,12 +179,14 @@ database.ref('/').on('value', function(snapshot) {
                         likes : likes,
                         dislikes : dislikes
                     }
+                    
                     database.ref(key).set(newLiker);
                     database.ref(key + "/likers").push({
                         user : localStorage.getItem('user'),
                         key : key,
-                        like : true
+                        vote : 1                       
                     });
+                    
                 })
             }
             else {
@@ -226,7 +231,7 @@ database.ref('/').on('value', function(snapshot) {
                     database.ref(key + "/dislikers").push({
                         user : localStorage.getItem('user'),
                         key : key,
-                        like : false                       
+                        vote : 1                       
                     });
                 })
             }
@@ -245,6 +250,15 @@ database.ref('/').on('value', function(snapshot) {
     
 })
 
+function elementExist(list, user) {
+    for(let i = 0; i < list.length; i++) {
+        if(list[i] == user){
+            return true;
+        }
+    }
+    return false;
+}
+
 sendButton.addEventListener("click", function() {
     let d = new Date();
     
@@ -257,11 +271,11 @@ sendButton.addEventListener("click", function() {
     };
     
     let likers = {
-        test : "asd"
+        test : ""
     }
     
     let dislikers = {
-        test : "asd"
+        test : ""
     }
     
     let newMessage = {
