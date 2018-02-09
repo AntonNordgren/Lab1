@@ -1,5 +1,7 @@
 
-logIn();
+window.onload = function(){
+    logIn();
+}
 
 // Initialize Firebase
 var config = {
@@ -240,15 +242,6 @@ database.ref('/').on('value', function(snapshot) {
     
 })
 
-function elementExist(list, user) {
-    for(let i = 0; i < list.length; i++) {
-        if(list[i] == user){
-            return true;
-        }
-    }
-    return false;
-}
-
 sendButton.addEventListener("click", function() {
     let d = new Date();
     
@@ -268,8 +261,12 @@ sendButton.addEventListener("click", function() {
         test : ""
     }
     
+    let user = localStorage.getItem('user');
+    let userobject = JSON.parse(user);
+    let username = userobject.name;
+    
     let newMessage = {
-        user : localStorage.getItem('user'),
+        user : username,
         message : inputBoard.value,
         date : newTime,
         likers : likers,
@@ -284,11 +281,18 @@ sendButton.addEventListener("click", function() {
 });
 
 logoutButton.addEventListener("click", function() {
+    window.localStorage.clear();
     logIn();
 });
 
 function logIn() {
-    let user = prompt("Enter User");
-    localStorage.setItem('user', user);
+    let currentUser = localStorage.getItem('user');
+    let currentUserObject = JSON.parse(currentUser);
+    if(currentUserObject === null) {
+        let username = prompt("Enter Name");
+        let user  = { name : username };
+        let datastring = JSON.stringify(user);
+        window.localStorage.setItem('user', datastring);
+    }
 }
 
